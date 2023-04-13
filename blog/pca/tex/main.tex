@@ -1,0 +1,334 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+
+\usepackage{natbib}
+
+\usepackage{amsmath,amsfonts,amsthm}
+\DeclareMathOperator{\spann}{span}
+\DeclareMathOperator{\pca}{pca}
+\DeclareMathOperator{\var}{var}
+\DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator{\tr}{tr}
+\DeclareMathOperator{\argmax}{argmax}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newtheorem{definition}{Definition}
+
+
+\title{
+    \large PCA \\
+    \small \emph{A tutorial on Principle Component Analysis}
+}
+\author{Khanh Nguyen}
+\date{August 2022, March 2023 Revisited}
+
+
+
+
+\begin{document}
+\maketitle
+
+\section{Problem Setup}
+
+\emph{In this section, we introduce the PCA problem}
+
+Given $n$ data points, we define \emph{mean} and \emph{variance} as follows
+
+\begin{definition}[mean and variance of$n$ data points]
+Let $\mathcal{X} = \{ x_1, x_2, ..., x_n\}$ where $x_i \in \mathbb{R}^d$, $x_i \in \mathbb{N} \cap [1, n]$. Define
+
+\begin{align*} 
+\mu(\mathcal{X}) &=  \frac{1}{n} \sum_{i=1}^n x_i \\
+\sigma(\mathcal{X}) &=  \frac{1}{n-1} \sum_{i=1}^n || x_i - \mu(\mathcal{X}) ||_2^2
+\end{align*}
+
+\end{definition}
+
+If data is centered, i.e $\mu(\mathcal{X}) = 0$, the variance can be rewritten as the sum of squared L2 norm of all data points, i.e $\sigma(\mathcal{X}) = \frac{1}{n-1} \sum_{i=1}^n || x_i ||_2^2$. Throughout this tutorial, we assume data is centered.
+
+We also denote $X = [x_1, x_2, ..., x_n] \in \mathbb{R}^{d \times n}$ as the data matrix of $\mathcal{X}$ where each column of $X$ corresponds to a data point in $\mathcal{X}$, we can rewrite \emph{mean} and \emph{variance} as follows
+
+\begin{definition}[mean and variance of a data matrix]
+Let $X = [x_1, x_2, ..., x_n] \in \mathbb{R}^{d \times n}$ be the data matrix of $n$ data points in $\mathbb{R}^d$
+
+\begin{align*} 
+\mu(X)      &=  \frac{1}{n} X \mathbf{1}_n = \mathbf{0}_d \\
+\sigma(X)   &=  \frac{1}{n-1} ||X|_F^2 = \frac{1}{n-1} \tr X^T X
+\end{align*}
+
+\end{definition}
+
+The PCA problem attempts to find a $k$-dimensional subspace of $\mathbb{R}^d$ denoted as $\mathcal{U}_k$ such as the orthogonal projection of $\mathcal{X}$ into $\mathcal{U}_k$ preserves as much variance of $\mathcal{X}$ as possible.
+
+Let $U_k = [u_1, u_2, ..., u_k] \in \mathbb{R}^{d \times k}$ be the matrix of a orthogonal basis of $\mathcal{U}_k$, i.e $U_k^T U_k = I_k$. The PCA projection of $\mathcal{X}$ into $\mathcal{U}_k$ can be written as $X \mapsto U_k U_k^T X$. 
+
+\begin{definition}[Principle Component Analysis]
+    Let $X \in \mathbb{R}^{d \times n}$
+    \begin{equation}
+        \pca_k X = \max_{U_k \in \mathbb{R}^{d \times k} \land U_k^T U_k = I_k} \sigma(U_k U_k^T X)
+\end{equation}
+\end{definition}
+
+Some preliminary observations
+\begin{itemize}
+  \item If data is centered, the projected data is also centered. $(U_k U_k^T X) \mathbf{1}_n = U_k U_k^T (X \mathbf{1}_n) = \mathbf{0}_d$
+  \item the maximum variance of data after the project is achievable if and only if all data points lie in the subspace $\mathcal{U}_k$
+\end{itemize}
+
+To elaborate on the second observation, let $V_k$ be the complement subspace of $U_k$ in $\mathbb{R}^d$, i.e every vector $x \in \mathbb{R}^d$ can be expressed as $x = u + v$ where $u \in U_k$ and $v \in V_k$. Furthermore, the L2 norm of $x$ can be expressed as $||x||_2^2 = ||u||_2^2 + ||v||_2^2$ (this is well-know Pythagorean theorem). Sum up all data points, we have $\sum_{i=1}^n ||x_i||_2^2 = \sum_{i=1}^n ||u_i||_2^2 + \sum_{i=1}^n ||v_i||_2^2$. Hence, $\sum_{i=1}^n ||x_i||_2^2 \geq \sum_{i=1}^n ||u_i||_2^2$. Since, the projected data is also centered, the RHS is the variance of projected data.
+
+In machine learning, we often use the inner product of data points into the $k$ \emph{principle} directions as a dimensionality reduction method for downstream tasks. In this tutorial, we call it \emph{PCA embedding}
+
+\begin{definition}[PCA Embedding]
+    \begin{equation}
+        X \mapsto \hat{U}_k^T X \in \mathbb{R}^{k \times n}
+    \end{equation}
+\end{definition}
+
+where $\hat{U}_k$ is the optimal value of $U_k$.
+
+
+\section{Reduction to Trace Optimization Problem}
+
+\emph{In this section, we find PCA solution by reducing it to Trace Optimization Problem}
+
+\begin{definition}[Trace Optimization Problem]
+    Given $M \in \mathbb{R}^{d \times d}$ symmetric positive semidefinite with $d$ eigenvalues $\lambda_1  \geq \lambda_2 \geq ... \geq \lambda_d \geq 0$. Find a matrix $U \in \mathbb{R}^{d \times k}$ with $U^T U = I_k$ such as the trace $\tr U^T M U$ is maximized or minimized
+\end{definition}
+
+The optimal value of \emph{Trace Optimization} is the sum of $k$ largest / smallest eigenvalues.
+
+\begin{align*}
+    \max_{U \in \mathbb{R}^{d \times k} \land U^T U = I_k} \tr U^T M U &= \sum_{i=1}^k \lambda_i \\
+    \min_{U \in \mathbb{R}^{d \times k} \land U^T U = I_k} \tr U^T M U &= \sum_{i=d-k+1}^d \lambda_i \\
+\end{align*}
+
+In the case of PCA, the objective can be rewritten as
+\begin{equation}
+\begin{split}
+    \sigma(U_k U_k^T X)    &= \tr (U_k U_k^T X)^T (U_k U_k^T X)  \\
+                        &= \tr X^T U_k (U_k^T U_k) U_k^T X \quad \text{(decompose)} \\
+                        &= \tr X^T U_k U_k^T X \quad \text{(orthogonal of $U_k$)} \\
+                        &= \tr U_k^T (X X^T) U_k \quad \text{(cyclic property of trace)}
+\end{split}
+\end{equation}
+
+Therefore, the solution of PCA can be obtained by solving \emph{Trace Optimization} where $M = XX^T$. Let $X = U \Sigma V^T$ be the \emph{Singular Value Decomposition} of $X$. We rewrite $XX^T = U \Sigma^2 U^T$. Hence, the solution is of PCA is the subspace with basis consists of $k$ left singular vectors corresponding to the $k$ largest singular values.
+
+\section{Equivalent to Low-Rank Approximation on Frobenius Norm}
+
+\subsection{Low-Rank Approximation on Frobenius Norm (LRA-FN)}
+
+Given matrix $A \in \mathbb{R}^{m \times n}$, the problem of Low-Rank Approximation on Frobenius Norm (LRA-FN) seeks to find a rank-$k$ approximation of $A$ ($k \leq \min(m, n)$). Formally,
+
+\begin{equation}
+    \min_{A_k \in \mathbb{R}^{m \times n} \land \rank A_k = k} ||A_k - A||_F^2
+\end{equation}
+
+The \emph{Eckart–Young–Mirsky theorem} states that the optimality is achievable when the rank-$k$ matrix $A$ is the rank-$k$ SVD of $A_k$, i.e $\hat{A}_k = U_k \Sigma_k V_k^T$. The optimal objective value is
+
+\begin{equation}
+    \min_{A_k \in \mathbb{R}^{m \times n} \land \rank A_k = k} ||A_k - A||_F^2 = ||\hat{A}_k - A||_F^2 = \sum_{i=k+1}^{n} \sigma_i^2
+\end{equation}
+
+where $\sigma_1 \geq \sigma_2 \geq ... \geq \sigma_{\min(m, n)} \geq 0$ are the singular values of $A$.
+
+We can rewrite the rank-$k$ SVD decomposition of $A$ as
+
+\begin{equation}
+    U_k \Sigma_k V_k^T = U_k U_k^T A
+\end{equation}
+
+Intuitively speaking, the best rank-$k$ approximation of matrix $A$ is achievable by orthogonally projecting its columns into the subspace constructed from $k$ left singular vectors corresponding to $k$ largest singular values. This operation is identical to PCA. In fact, LRA-FN and PCA are equivalent.
+
+\begin{theorem}
+    PCA and LRA-FN are equivalent
+\end{theorem}
+
+\subsection{PCA $\to$ LRA-FN}
+
+\emph{In this section, we find the solution of PCA from the solution of LRA-FN}
+
+In PCA, we want to find $U_k$ such as $\sigma(U_k U_k^T X)$ is maximized. We can rewrite the objective as
+
+\begin{equation}
+    \sigma(U_k U_k^T X) = ||U_k U_k^T X||_F^2
+\end{equation}
+
+Since $U_k U_k^T$ is a orthogonal projection, $U_k U_k^T x$ and $U_k U_k^T x - x$ are orthogonal for all $x \in \mathbb{R}^d$: $(U_k U_k^T x)^T (U_k U_k^T x - x) = 0$
+
+Apply \emph{Pythagorean theorem} for all columns of $U_k U_k^T X$
+
+\begin{equation}
+    \begin{split}
+    ||U_k U_k^T X||_F^2 + ||U_k U_k^T X - X||_F^2 = ||X||_F^2 \\ 
+    ||U_k U_k^T X||_F^2 = ||X||_F^2 - ||U_k U_k^T X - X||_F^2 
+    \end{split}
+\end{equation}
+
+By \emph{LRA-FN}, 
+
+\begin{equation}
+    ||U_k U_k^T X - X||_F^2 \geq ||\hat{U}_k \hat{U}_k^T X - X||_F^2   
+\end{equation}
+
+Where $\hat{U}_k$ is the matrix of $k$ left singular values of $X$ corresponding to the $k$ largest singular values.
+
+Hence,
+\begin{equation}
+    ||U_k U_k^T X||_F^2 \leq ||X||_F^2 - ||\hat{U}_k \hat{U}_k^T X - X||_F^2 = \sum_{i=1}^k \sigma_i^2
+\end{equation}
+
+where $\sigma_1 \geq \sigma_2 \geq ... \geq \sigma_{\min(d, n)} \geq 0$ are the singular values of $X$.
+
+$U_k = \hat{U}_k$ admits equality.
+
+\subsection{LRA-FN $\to$ PCA}
+
+\emph{In this section, we find the solution of LRA-FN from the solution of PCA}
+
+Given any rank-$k$ approximation $A_k \in \mathbb{R}^{m \times n}$ of $A$, let $U_k \in \mathbb{R}^{m \times k}$ be a orthogonal basis of column space of $A$. We will prove that $U_k U_k^T A$ gives a better or as good approximation of $A$ as $A_k$.
+
+\begin{theorem}[minimal distance]
+\label{theo:minimal_distance}
+For any vector $u$ in a $k$-dimensional subspace $\mathcal{U}_k$, the minimal distance to another vector $a \in \mathbb{R}^m$ is achievable when $u$ is the projection of $a$ onto $\mathcal{U}_k$.
+
+\begin{equation}
+    \min_{u \in \mathcal{U}_k} ||u - a||_2 = ||U_k U_k^T a - a||_2
+\end{equation}
+where columns of $U_k$ is a orthogonal basis of $\mathcal{U}_k$
+\end{theorem}
+
+Apply theorem \ref{theo:minimal_distance} to columns of $A_k$ and $A$, we have
+
+\begin{equation}
+    ||A_k - A||_F \geq ||U_k U_k^T A - A||_F
+\end{equation}
+
+By \emph{Pythagorean theorem},
+
+\begin{equation}
+    ||U_k U_k^T A - A||_F = ||A||_F - ||U_k U_k^T A||_F
+\end{equation}
+
+By PCA, $||U_k U_k^T A||_F$ is maximal when $U_k$ is the $k$ left singular vectors corresponding to the $k$ largest singular values.
+
+\begin{equation}
+    ||\hat{U}_k \hat{U}_k^T A||_F \geq ||U_k U_k^T A||_F
+\end{equation}
+
+Hence,
+
+\begin{equation}
+\begin{split}
+    ||A_k - A||_F   &\geq ||U_k U_k^T A - A||_F \\
+                    &= ||A||_F - ||U_k U_k^T A||_F \\
+                    &\geq ||A||_F - ||\hat{U}_k \hat{U}_k^T A||_F
+\end{split}     
+\end{equation}
+
+The equality is admitted in both conditions (1) $A_k$ is the orthogonal projection of $A$ in some subspace of dimension $k$ and (2) the subspace is from PCA.
+
+\section{Sequential PCA}
+
+\emph{In machine learning, sometimes, number of data points is very large and they come sequentially. Sequential PCA attempts to approximate the PCA in O(1) time. This section is a discussion on concept drifting in sequential PCA}
+
+Suppose there exists an algorithm producing PCA embedding $y_1^{(t)}, y_2^{(t)}, ..., y_t^{(t)} \in \mathbb{R}^k$ of input data point $x_1, x_2, ..., x_t \in \mathbb{R}^d$ after receiving data point $x_t$ at time $t$. Let $U_k^{(t)} \in \mathbb{R}^{k \times d}$ be the approximated $k$-dimensional projection subspace of PCA at time $t$. When a new data point come, the algorithm yields a new approximation of the projection subspace $U_k^{(t+1)}$. Generally, the new approximation will be different. The authors in \cite{7498277} introduced an update to all previous embedding vectors as
+
+\begin{equation}
+    y_{t}^{(t_2)} \mapsto  U_k^{(t_2)T} U_k^{(t_1)} y_{t}^{(t_1)}
+\end{equation}
+
+The update can be decomposed into two steps: (1) map the embedding of $x_t$ at time $t_1$: $y_t^{(t_1)} \in \mathbb{R}^k$ back to $\mathbb{R}^d$ (2) project the resulting vector / tensor into the new basis $U_k^{(t_2)}$ that yields the embedding of $x_t$ at time $t_2$: $y_t^{(t_2)}$
+
+\section{Appendix}
+\subsection{A proof of Trace Optimization Problem}
+
+We have 
+
+\begin{equation}
+\begin{split}
+    \tr U^T M U &= \tr M (U U^T) \quad \text{(cyclic property)} \\ 
+                &\leq \sum_{i=1}^d \sigma_i(M) \sigma_i(U U^T) \quad \text{(Von Neumann's Trace Inequality)} \\
+                &= \sum_{i=1}^k \sigma_i(M) \quad \text{($U$ is orthogonal rank-$k$)}
+\end{split}
+\end{equation}
+
+where $\sigma_i(A)$ is the $i$-th singular value of $A$ sorted descending.
+
+\subsection{A proof of Von Neumann's Trace Inequality}
+
+\emph{This proof is by user1551 from Mathematics Stack Exchange \cite{user1551}}
+
+The Von Neumann's Trace Inequality is stated as follow:
+
+\begin{theorem}
+    Given two complex matrices $A, B \in \mathbb{R}^{n \times n}$ with singular values $\alpha_1 \geq \alpha_2 \geq ... \geq \alpha_n \geq 0$ and $\beta_1 \geq \beta_2 \geq ... \geq \beta_n \geq 0$
+    \begin{equation}
+        |\tr AB| \leq \sum_{i=1}^n \alpha_i \beta_i
+    \end{equation}
+\end{theorem}
+
+\begin{lemma}
+\label{lem:1}
+The Von Neumann's Trace Inequality can be reduced to 
+
+\begin{equation}
+    \label{eq:vonn_neumann_reduced}
+    |\tr D U S V^*| \leq tr D S
+\end{equation}
+
+such that $U$ and $V$ are unitary and $D = diag(d_1, d_2, ..., d_n)$, $S = diag(s_1, s_2, ..., s_n)$
+\end{lemma}
+
+Let $P_k$ denotes the orthogonal projection matrix $I_k \bigoplus 0_{n-k} = diag(1, 1, ..., 1, 0, 0, ..., 0)$ ($k$ times of $1$)
+
+We write $D$ and $S$ as the non-negatively weighted sum of $P_k$s
+
+\begin{equation}
+    D = (d_1 - d_2) P_1 + (d_2 - d_3) P_2 + ... + (d_{n-1} - d_n) P_{n-1} + d_n P_n
+\end{equation}
+
+and similarly for $S$. Conveniently, we write $D = \sum_k \alpha_k P_k$, $S = \sum_l \beta_l P_l$. Inequality \ref{eq:vonn_neumann_reduced} becomes
+
+\begin{equation}
+    \label{eq:vonn_neumann_decomposed}
+    |\sum_{k, l} \alpha_k \beta_l \tr P_k U P_l V^*| \leq \sum_{k, l} \alpha_k \beta_l \tr P_k P_l
+\end{equation}
+
+If we have $|\tr P_k U P_l V^*| \leq tr P_k P_l$, \emph{Triangle Inequality} implies the inequality \ref{eq:vonn_neumann_decomposed}. ($|a + b| \leq |a| + |b|$)
+
+Indeed, denote $U = [u_1, u_2, ..., u_n]$, $V = [v_1, v_2, ..., v_n]$, so that $P_k U P_l = [P_k u_1, P_k u_2, ..., P_k u_l, 0, ..., 0]$. Assuming $l \leq k$, we have
+
+\begin{equation}
+\begin{split}
+     \big|\tr (P_k U P_l) V^*\big|  &= \big|\tr V^* (P_k U P_l) \big| \quad \text{(cyclic property)} \\  
+                                    &= \bigg| \sum_{i=1}^n \langle (P_k U P_l)_i, v_i \rangle \bigg| \quad \text{(unroll)} \\
+                                    &= \bigg| \sum_{i=1}^l \langle P_k u_i, v_i \rangle \bigg| \quad \text{(unroll)} \\
+                                    &\leq \bigg| \sum_{i=1}^l ||P_k u_i|| ||v_i|| \bigg| \quad \text{(\emph{Cauchy–Schwarz inequality})} \\
+                                    &= \sum_{i=1}^l ||P_k u_i|| \quad \text{(\emph{unit vector})} \\
+                                    &= \sum_{i=1}^l 1 \quad \text{(\emph{orthogonal projection matrix})} \\
+                                    &= l \\
+                                    &= \tr P_k P_l
+\end{split}
+\end{equation}
+
+For the other case, $l > k$, we write $\big|\tr (P_k U P_l) V^*\big| = \big|\tr U (P_l V^* P_k)\big|$ then apply \emph{Cauchy–Schwarz inequality} on row space instead.
+
+\subsubsection{Proof of lemma \ref{lem:1}}
+
+SVD: $A = U_A \Sigma_A V_A^*$, $B = U_B \Sigma_B V_B^*$
+
+\begin{equation}
+\begin{split}
+    \tr AB  &= \tr U_A \Sigma_A V_A^* U_B \Sigma_B V_B^* \\
+            &= \tr \Sigma_A (V_A^* U_B) \Sigma_B (U_A^* V_B)* \quad \text{(cyclic property)} \\ 
+            &= \tr D U C V^* \\
+\end{split}
+\end{equation}
+
+\bibliographystyle{plain}
+\bibliography{references}
+
+\end{document}
