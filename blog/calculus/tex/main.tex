@@ -1,0 +1,206 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+
+\usepackage{natbib}
+
+\usepackage{amsmath,amsfonts,amsthm}
+\DeclareMathOperator{\spann}{span}
+\DeclareMathOperator{\pca}{pca}
+\DeclareMathOperator{\var}{var}
+\DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator{\tr}{tr}
+\DeclareMathOperator{\argmax}{argmax}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newtheorem{definition}{Definition}
+
+
+\title{
+    \large Calculus
+}
+\author{Khanh Nguyen}
+\date{May 2023}
+
+\begin{document}
+\maketitle
+
+\emph{As a physics student in high school, CS undergraduate in NTU, I never have a proper/formal introduction to calculus. This tutorial is my best effort to formalize calculus for real numbers and served as a cheat sheet as well}
+
+\section{Derivative}
+
+Let $f \in \mathcal{C}^1(\mathbb{R}^m, \mathbb{R}^n)$. In this tutorial, to simplify the analysis, we assume $f$ being continuously differentiable.
+
+We define the derivative $D: \mathcal{C}^1(\mathbb{R}^m, \mathbb{R}^n) \to \mathbb{R}^m \to \mathcal{L}(\mathbb{R}^m, \mathbb{R}^n)$ \footnote{
+    \textbf{function currying notation} \\
+    $A \to B$: set of all functions from $A$ to $B$ \\
+    $A \to B \to C = A \to (B \to  C)$ \\
+}
+where
+
+\begin{itemize}
+    \item $\mathcal{C}^1(\mathbb{R}^m, \mathbb{R}^n)$: set of all continuously differentiable functions from $\mathbb{R}^m$ to $\mathbb{R}^n$
+    \item $\mathcal{L}(\mathbb{R}^m, \mathbb{R}^n)$: set of all linear maps from $\mathbb{R}^m$ to $\mathbb{R}^n$
+\end{itemize}
+
+The derivative $D$ is an operator acting on the set of all continuously differentiable functions from $\mathbb{R}^m$ to $\mathbb{R}^n$ and produce a linear map on every points on $\mathbb{R}^m$
+
+The derivative of $f$ at $x_0 \in \mathbb{R}^m$ is the \emph{closest} linear map \footnote{the existence and uniqueness of $Df(x_0)$ is a corrolary of Taylor's Theorem} to $f$ at $x_0$ 
+
+\begin{equation}
+    f(x) = f(x_0) + Df(x_0) (x - x_0) + o(x - x_0)
+\end{equation}
+
+where $o(x - x_0) \subset \mathbb{R}^m \to \mathbb{R}^n$ is the set of functions strictly smaller than $||x - x_0||$ when $x$ approaches $x_0$, i.e $\lim_{x \to x_0} \frac{||o(x - x_0)||}{||x - x_0||} = 0$
+
+$Df(x)$ is a linear map from $\mathbb{R}^m$ to $\mathbb{R}^n$ which coincide with the Jacobian matrix $J_{f(x)} \in \mathbb{R}^{n \times m}$
+
+\begin{equation}
+J_{f(x)} = \begin{bmatrix}
+\frac{\partial f_1}{\partial x_1} & ... & \frac{\partial f_1}{\partial x_m} \\
+... & ... & ... \\
+\frac{\partial f_n}{\partial x_1} & ... & \frac{\partial f_n}{\partial x_m} \\
+\end{bmatrix}    
+\end{equation}
+
+\section{Derivative of element-wise function}
+
+Given a scalar function $\sigma \in \mathcal{C}^1(\mathbb{R}, \mathbb{R})$ with derivate $D\sigma(x) \in \mathcal{L}(\mathbb{R}, \mathbb{R})$ which is a 1d linear function, i.e $y = ax$ for $a, x \in \mathbb{R}$
+
+We can generalize this function to $n$-dimensional $\Bar{\sigma}(x) \in \mathcal{C}^1(\mathbb{R}^n, \mathbb{R}^n)$ such that if $y = \Bar{\sigma}(x)$ for $x \in \mathbb{R}^n$, then we have
+
+\begin{equation}
+    y_i = \sigma(x_i)    
+\end{equation}
+
+We can calculate the Jacobian matrix of this function
+
+\begin{equation}
+J = \begin{bmatrix}
+\frac{\partial y_1}{\partial x_1} & ... & \frac{\partial y_1}{\partial x_n} \\
+... & ... & ... \\
+\frac{\partial y_n}{\partial x_1} & ... & \frac{\partial y_n}{\partial x_n} \\
+\end{bmatrix}    
+\end{equation}
+
+where
+
+\begin{equation}
+    J_{i, j} = 
+    \begin{cases}
+    D\sigma(x_i) &\text{if $i = j$} \\
+    0 &\text{if $i \neq j$} \\
+    \end{cases}
+\end{equation}
+
+Jacobian matrix is diagonal
+
+\begin{equation}
+J = \begin{bmatrix}
+D\sigma(x_0) & ... & 0 \\
+... & ... & ... \\
+0 & ... & D\sigma(x_n) \\
+\end{bmatrix}    
+\end{equation}
+
+\section{Chain Rule}
+
+Chain rule is used when we can to calculate the derivative of a function composition. Let's derive the chain rule.
+
+Given $f \in \mathcal{C}^1(\mathbb{R}^n, \mathbb{R}^k)$, $g \in \mathcal{C}^1(\mathbb{R}^m, \mathbb{R}^n)$, and $f \circ g \in \mathcal{C}^1(\mathbb{R}^m, \mathbb{R}^k)$. We will calculate $D(f \circ g)$ given $Df$ and $Dg$
+
+Let $x, x_0 \in \mathbb{R}^m$ and $y = g(x), y_0 = g(x_0) \in \mathbb{R}^n$
+
+$Df(y_0)$ is the derivative of $f$ at $y_0$, we have
+
+\begin{equation}
+    f(y) = f(y_0) + Df(y_0)(y - y_0) + o(y - y_0)
+\end{equation}
+
+Rewrite
+
+\begin{equation}
+    (f \circ g)(x) = (f \circ g)(x_0) + Df(g(x_0))(g(x) - g(x_0)) + o(g(x) - g(x_0))
+\end{equation}
+
+$Dg(x_0)$ is the derivative of $f$ at $x_0$, we have
+
+\begin{equation}
+    g(x) = g(x_0) + Dg(x_0)(x - x_0) + o(x - x_0)
+\end{equation}
+
+Hence
+
+\begin{align*}
+    (f \circ g)(x)  &= (f \circ g)(x_0) + Df(g(x_0))(Dg(x_0)(x - x_0) + o(x - x_0)) + o(g(x) - g(x_0)) \\
+                    &= (f \circ g)(x_0) + Df(g(x_0)) Dg(x_0)(x - x_0) + Df(g(x_0)) o(x - x_0) + o(g(x) - g(x_0)) \\
+\end{align*}
+
+
+We can prove $Df(g(x_0)) o(x - x_0) + o(g(x) - g(x_0)) = o(x - x_0)$ by assuming $||Df(g(x_0))|| < \infty$ and $||Dg(x_0)|| < \infty$ \\
+
+
+$Df(g(x_0)) o(x - x_0)$ is small
+
+\begin{align*}
+    ||Df(g(x_0)) o(x - x_0)||  &\leq ||Df(g(x_0))|| ||o(x - x_0)|| &\text{(operator norm)} \\
+\end{align*}
+
+We have
+\begin{align*}
+    \lim_{x \to x_0} \frac{||Df(g(x_0)) o(x - x_0)||}{||x - x_0||}  &\leq ||Df(g(x_0))|| \lim_{x \to x_0} \frac{||o(x - x_0)||}{||x - x_0||} \\
+                                                                    &= 0 \\
+\end{align*}
+
+
+$o(g(x) - g(x_0))$ is small
+
+\begin{align*}
+    \frac{||o(g(x) - g(x_0))||}{||x - x_0||}    &= \frac{||o(g(x) - g(x_0))||}{||g(x) - g(x_0)||} \frac{||g(x) - g(x_0)||}{||x - x_0||} \\
+                                                &= \frac{||o(g(x) - g(x_0))||}{||g(x)- g(x_0)||} \frac{||Dg(x_0)(x - x_0) + o(x - x_0)||}{||x - x_0||} \\
+                                                &\leq \frac{||o(g(x) - g(x_0))||}{||g(x)- g(x_0)||} \frac{||Dg(x_0)(x - x_0)|| + ||o(x - x_0)||}{||x - x_0||} &\text{(Cauchy-Schwarz)} \\
+                                                &\leq \frac{||o(g(x) - g(x_0))||}{||g(x)- g(x_0)||} \frac{||Dg(x_0)|| ||(x - x_0)|| + ||o(x - x_0)||}{||x - x_0||} &\text{(operator norm)} \\
+                                                &= \frac{||o(g(x) - g(x_0))||}{||g(x)- g(x_0)||} ( ||Dg(x_0)|| + \frac{||o(x - x_0)||}{||x - x_0||} )
+\end{align*}
+
+We have
+\begin{align*}
+    \lim_{x \to x_0} \frac{||o(g(x) - g(x_0))||}{||x - x_0||}  &\leq \lim_{x \to x_0} \frac{||o(g(x) - g(x_0))||}{||g(x)- g(x_0)||} ( ||Dg(x_0)|| + \frac{||o(x - x_0)||}{||x - x_0||} \\
+                                                                    &= 0 \\
+\end{align*}
+
+Therefore,
+
+\begin{equation}
+    (f \circ g)(x) = (f \circ g)(x_0) + Df(g(x_0)) Dg(x_0)(x - x_0) + o(x - x_0) \\
+\end{equation}
+
+\begin{theorem} [Chain Rule]
+Given two differentiable function $f \in \mathcal{C}^1(\mathbb{R}^n, \mathbb{R}^k)$, $g \in \mathcal{C}^1(\mathbb{R}^m, \mathbb{R}^n)$, the derivative of the composition $f \circ g$ is $D(f \circ g)(x) = Df(g(x)) Dg(x)$
+\end{theorem}
+
+\section{Change of variables}
+
+Given a Lebesgue integral on a measurable subset $E \subset \mathbb{R}^n$ of positive measurable function $f: E \to [0, \infty)$ 
+
+\begin{equation}
+    \int_{E} f
+\end{equation}
+
+Let $G: \Omega \to E$ be a parameterization satisfying certain conditions \footnote{$\mathcal{C}^1$ diffeomorphism} where $\Omega$. Then
+
+\begin{equation}
+    \int_{E} f = \int_{\Omega} (f \circ G) |DG|
+\end{equation}
+
+where $|DG|$ is the determinant of derivative of $G$
+
+
+
+
+
+
+\bibliographystyle{plain}
+\bibliography{references}
+
+\end{document}
