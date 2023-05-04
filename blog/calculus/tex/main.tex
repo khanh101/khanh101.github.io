@@ -53,7 +53,7 @@ The derivative of $f$ at $x_0 \in \mathbb{R}^m$ is the \emph{closest} linear map
 
 where $o(x - x_0) \subset \mathbb{R}^m \to \mathbb{R}^n$ is the set of functions strictly smaller than $||x - x_0||$ when $x$ approaches $x_0$, i.e $\lim_{x \to x_0} \frac{||o(x - x_0)||}{||x - x_0||} = 0$
 
-$Df(x)$ is a linear map from $\mathbb{R}^m$ to $\mathbb{R}^n$ which coincide with the Jacobian matrix $J_{f(x)} \in \mathbb{R}^{n \times m}$
+$Df(x)$ is a linear map from $\mathbb{R}^m$ to $\mathbb{R}^n$ which is isomorphic to the Jacobian matrix $J_{f(x)} \in \mathbb{R}^{n \times m}$
 
 \begin{equation}
 J_{f(x)} = \begin{bmatrix}
@@ -62,6 +62,19 @@ J_{f(x)} = \begin{bmatrix}
 \frac{\partial f_n}{\partial x_1} & ... & \frac{\partial f_n}{\partial x_m} \\
 \end{bmatrix}    
 \end{equation}
+
+\section{Linearity of Derivative Operator}
+
+The derivative operator is linear. Given $f, g \in \mathcal{C}^1(\mathbb{R}^m, \mathbb{R}^n)$ and $\alpha \in \mathbb{R}$
+
+\begin{itemize}
+    \item $D(f + g) = Df + Dg$
+    \item $D \alpha f = \alpha D f$
+\end{itemize}
+
+where the addition and scalar multiplication are defined as $(f + g)(x) = f(x) + g(x)$ and $(\alpha f)(x) = \alpha f(x)$
+
+
 
 \section{Derivative of element-wise function}
 
@@ -193,8 +206,97 @@ Let $G: \Omega \to E$ be a parameterization satisfying certain conditions \footn
     \int_{E} f = \int_{\Omega} (f \circ G) |DG|
 \end{equation}
 
-where $|DG|$ is the determinant of derivative of $G$
+where $|DG|(x) = |(DG)(x)|$ is the determinant of derivative of $G$
 
+\section{Higher Order Derivative}
+
+In first-order derivative, $Df$ is defined as a set of linear maps on every point in the domain $\mathbb{R}^m$
+
+\begin{align*}
+    f   &\in \mathbb{R}^m \to \mathbb{R}^n \\
+    Df  &\in \mathbb{R}^m \to \mathcal{L}(\mathbb{R}^m, \mathbb{R}^n) \\ 
+\end{align*}
+
+Notice that $\mathcal{L}(\mathbb{R}^m, \mathbb{R}^n)$ is isomorphic to $\mathbb{R}^{n \times m}$ which is also a finite dimensional vector space on $\mathbb{R}$. And all finite dimensional vector space on $\mathbb{R}$ is isomorphic to $\mathbb{R}^d$ for some $d \in \mathbb{N}$. We can define the second-order derivative of $f$ as follows
+
+\begin{equation}
+    D^2 f  = DDf \in \mathbb{R}^m \to \mathcal{L}(\mathbb{R}^m, \mathcal{L}(\mathbb{R}^m, \mathbb{R}^n)) = \mathbb{R}^m \to \mathcal{L}(\mathbb{R}^m, \mathbb{R}^m; \mathbb{R}^n)
+\end{equation}
+
+where $\mathcal{L}(\mathbb{R}^m, \mathbb{R}^m; \mathbb{R}^n)$ denotes the set of all bi-linear map from $\mathbb{R}^m \times \mathbb{R}^m$ to $\mathbb{R}^n$ \footnote{proof will be done until my mind is clearer}
+
+\section{Algebra on Space of Operator}
+
+Let $A, B, C \in (X \to Y) \to (X \to Y)$, linear operator $D \in (X \to Y) \to (X \to Y)$, $f \in X \to Y$, define
+
+\begin{itemize}
+    \item Addition: $(A + B)f = Af + Bf$
+    \item Commutativity of addition: $A + B = B + A$
+    \item Associativity of addition: $(A + B) + C = A + (B + C)$
+    \item Composition: $(AB)f = A (Bf)$
+    \item Associativity of composition: $(AB)C = A(BC)$
+    \item Distributivity: $(A + B)C = AC + BC$
+    \item Distributivity for linear operator: $D(A + B) = DA + DB $
+\end{itemize}
+
+\subsection{Eigenfunction}
+
+Let $Y$ be a vector space over a field $\mathbb{K}$
+
+An eigenfunction of a operator $A \in (X \to Y) \to (X \to Y)$ is $f \in X \to Y$ such that
+
+\begin{equation}
+    A f = \lambda f
+\end{equation}
+
+for some scalar $\lambda \in \mathbb{K}$ and define operator $\lambda$ as $(\lambda f)(x) = \lambda f(x)$
+
+\subsection{Polynomial of linear operator}
+Let $Y$ be a vector space over a field $\mathbb{K}$, $r_1, ..., r_n \in \mathbb{K}$
+
+We can expand the products of linear factors of linear operator $D$ as follows
+
+\begin{equation}
+    (D+r_1)(D+r_2)...(D+r_n) = a_0 + a_1 D + a_2 D^2 + ... + a_n D^n
+\end{equation}
+
+
+The RHS is a polynomial of degree $n$ of $D$
+
+Proof by induction: Let $\lambda \in \mathbb{K}$, we have the commutativity of scalar operator $\lambda D = D \lambda$
+
+\begin{align*}
+    (D + \lambda) \sum_{j=0}^n a_j D^j  &= D \sum_{j=0}^n a_j D^j + \lambda \sum_{j=0}^n a_j D^j &\text{(distributivity)} \\
+                                        &= \sum_{j=0}^n D a_j D^j + \lambda \sum_{j=0}^n a_j D^j &\text{(distributivity of linear operator)} \\
+                                        &= \sum_{j=0}^{n} a_j D^{j+1} + \lambda \sum_{j=0}^n a_j D^j &\text{(commutativity of scalar operator)} \\
+                                        &= \lambda a_0 + (\sum_{j=1}^{n} (a_{j-1} + \lambda a_j) D^j) + a_n D^{n+1} &\text{(communtative, associative of addition)} \\
+\end{align*}
+
+
+
+Example: Given $f \in \mathbb{R} \to \mathbb{R}$, linear $D \in (\mathbb{R} \to \mathbb{R}) \to (\mathbb{R} \to \mathbb{R})$, $(1f)(x) = f(x)$, $(2f)(x) = 2f(x)$
+
+\begin{align*}
+    (D + 1)(D + 2)  &= D(D+2) + 1(D+2)              &\text{(distributivity)} \\
+                    &= D^2 + D2 + 1D + 1 \cdot 2    &\text{(distributivity for linear operator)} \\
+                    &= D^2 + D2 + 1D + 2            &\text{(property of scalar operator)} \\
+                    &= D^2 + 2D + 1D + 2            &\text{(property of scalar operator)} \\
+                    &= D^2 + (2 + 1)D + 2           &\text{(distributivity)} \\
+                    &= D^2 + 3D + 2                 &\text{(property of scalar operator)} \\
+\end{align*}
+
+\subsection{Homogeneous differential equation with constant coefficients}
+
+Let $a_0, a_1, ..., a_n \in \mathbb{R}$ and $y \in \mathcal{C}^n (\mathbb{R}, \mathbb{R})$
+
+\begin{equation}
+    a_0 y + a_1 y' + a_2 y'' + a_3 y^{(3)} + ... + a_n y^{(n)} = 0
+\end{equation}
+
+Or in the differential operator form
+\begin{equation}
+    a_0 + a_1 D + a_2 D^2 + ... + a_n D^n = 0
+\end{equation}
 
 
 
