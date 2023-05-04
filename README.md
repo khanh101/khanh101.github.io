@@ -2,36 +2,27 @@
 
 Why `101`?
 
-- `192.168.x.101` is the first IP address in my local network.
+`192.168.x.101` is the first IPv4 in my local network.
 
-🔭 I’m currently working on ...
+![Khanh101's GitHub stats (including private)](https://github-readme-stats.vercel.app/api?username=khanh101&count_private=true&show_icons=true)
 
-- self-discipline
 
-🌱 I’m currently learning ...
 
-- more math
 
-👯 I’m looking to collaborate on ...
+<!--
+**khanh101/khanh101** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
 
-- 
+Here are some ideas to get you started:
 
-🤔 I’m looking for help with ...
-
-- `crypt-dir`
-
-💬 Ask me about ...
-
-- computer 
-
-📫 How to reach me: ...
-
-- `khanh.nguyen.contact@gmail.com`
-
-⚡ Fun fact: ...
-
-- formal language is hard
-
+- 🔭 I’m currently working on ...
+- 🌱 I’m currently learning ...
+- 👯 I’m looking to collaborate on ...
+- 🤔 I’m looking for help with ...
+- 💬 Ask me about ...
+- 📫 How to reach me: ...
+- 😄 Pronouns: ...
+- ⚡ Fun fact: ...
+-->
 
 View count
 
