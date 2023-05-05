@@ -25,11 +25,11 @@
 \begin{document}
 \maketitle
 
-\emph{As a physics student in high school, CS undergraduate in NTU, I never have a proper/formal introduction to calculus. This tutorial is my best effort to formalize calculus for real numbers and served as a cheat sheet as well}
+\emph{As a physics student in high school, CS undergraduate in NTU, I never have a proper/formal introduction to calculus. This notes is my best effort to formalize calculus for real numbers and served as a cheat sheet as well}
 
 \section{Derivative}
 
-Let $f \in \mathcal{C}^1(\mathbb{R}^m, \mathbb{R}^n)$. In this tutorial, to simplify the analysis, we assume $f$ being continuously differentiable.
+Let $f \in \mathcal{C}^1(\mathbb{R}^m, \mathbb{R}^n)$. In this notes, to simplify the analysis, we assume $f$ being continuously differentiable.
 
 We define the derivative $D: \mathcal{C}^1(\mathbb{R}^m, \mathbb{R}^n) \to \mathbb{R}^m \to \mathcal{L}(\mathbb{R}^m, \mathbb{R}^n)$ \footnote{
     \textbf{function currying notation} \\
@@ -285,21 +285,84 @@ Example: Given $f \in \mathbb{R} \to \mathbb{R}$, linear $D \in (\mathbb{R} \to 
                     &= D^2 + 3D + 2                 &\text{(property of scalar operator)} \\
 \end{align*}
 
-\subsection{Homogeneous differential equation with constant coefficients}
+\subsection{Differential equation with constant coefficients}
 
-Let $a_0, a_1, ..., a_n \in \mathbb{R}$ and $y \in \mathcal{C}^n (\mathbb{R}, \mathbb{R})$
+Let $a_0, a_1, ..., a_n \in \mathbb{R}$ and $x, y \in \mathcal{C}^n (\mathbb{R}, \mathbb{R})$
 
 \begin{equation}
-    a_0 y + a_1 y' + a_2 y'' + a_3 y^{(3)} + ... + a_n y^{(n)} = 0
+    a_0 y + a_1 y' + a_2 y'' + a_3 y^{(3)} + ... + a_n y^{(n)} = x
 \end{equation}
 
 Or in the differential operator form
 \begin{equation}
-    a_0 + a_1 D + a_2 D^2 + ... + a_n D^n = 0
+    (a_0 + a_1 D + a_2 D^2 + ... + a_n D^n)y = x
 \end{equation}
 
+Suppose we can write the polynomial of $D$ as product of linear factors \footnote{in Real field, every polynomial can be written as product of linear and quadratic factors, in Complex field, every polynomial can be written as product of linear factors. Here I tried to make it as simple as possible. The idea is more important}
 
+\begin{equation}
+    (D - r_1)(D - r_2)...(D - r_n)y = x
+\end{equation}
 
+Let $z \in \mathbb{R} \to \mathbb{R}$ be the function produced by the last $n-1$ linear factors applied on $y$, i.e $z = (D - r_2)...(D - r_n)y$ \footnote{$z$ exists because $y$ is $n$ times continuously differentiable}. We have
+
+\begin{equation}
+    (D - r_1) z = x
+    \label{base_case}
+\end{equation}
+
+We observe that $z$ is an eigenfunction of $D$. Furthermore, since $D$ is linear, any linear combination of eigenfunctions of $D$ is also an eigenfunction of $D$. Solutions of this equation form a vector space.
+
+From thousands of years of human knowledge, people told me that one of the eigenfunction of $D$ is $e^{\alpha t}$ for $\alpha \in \mathbb{R}$. It's simple to verify
+
+\begin{equation}
+    De^{\alpha t} = \alpha e^{\alpha t}
+\end{equation}
+
+So the associated eigenvalue is $\alpha$.
+
+Lucky for us, many functions can be written as a finite sum/infinite sum of $c e^{\alpha t}$ \footnote{How many? I don't know. Maybe related to equi-small tails property of subset of Hilbert space w.r.t countable set of $e^{\alpha t}$}. Write $x$ as an infinite sum of $c e^{\alpha t}$
+
+\begin{equation}
+    (D - r_1) z = \sum_{i=1}^\infty c_i e^{\alpha_i t}
+\end{equation}
+
+Write $z$ as an infinite sum of $c e^{\alpha t}$ with the same "basis"
+
+\begin{align*}
+    (D - r_1) \sum_{i=1}^\infty d_i e^{\alpha_i t}  &= \sum_{i=1}^\infty c_i e^{\alpha_i t} \\
+    \sum_{i=1}^\infty (\alpha_i - r_1) d_i  e^{\alpha_i t}  &= \sum_{i=1}^\infty c_i e^{\alpha_i t} \\
+\end{align*}
+
+So, we can calculate $d_i = c_i / (\alpha_i - r_1)$
+
+Since we can solve \ref{base_case}, we can solve the $n$-order differential equation with constant coefficients using induction argument.
+
+\section{Hessian Matrix}
+
+The second-order derivative of $f \in \mathbb{R}^n \to \mathbb{R}$ is
+
+\begin{equation}
+    D^2 f \in \mathcal{L}(\mathbb{R}^n, \mathcal{L}(\mathbb{R}^n, \mathbb{R}))
+\end{equation}
+
+A linear map from $\mathbb{R}^n$ to its dual space is isomorphic to an $n \times n$ matrix, hence Hessian matrix. The second derivative can be represented as
+
+\begin{equation}
+    D^2 f(x) = x^T H_{f(x)} x
+\end{equation}
+
+where $H_{f(x)}$ is the Hessian matrix of $f$ at x
+
+\begin{equation}
+H_{f(x)} = \begin{bmatrix}
+\frac{\partial^2 f}{\partial^2 x_1} & ... & \frac{\partial^2 f}{\partial x_1 \partial x_n} \\
+... & ... & ... \\
+\frac{\partial^2 f}{\partial x_n \partial x_1} & ... & \frac{\partial f}{\partial^2 x_n} \\
+\end{bmatrix}    
+\end{equation}
+
+Another note is that $H$ is symmetric by the symmetric property of second-derivative, so its  eigenvalues are real. Another nice property, $H$ is positive semi-definite everywhere on $\mathbb{R}^n$ if and only if $f$ is convex.
 
 
 \bibliographystyle{plain}
