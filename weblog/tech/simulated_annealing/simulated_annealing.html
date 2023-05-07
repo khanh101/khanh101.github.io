@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Khanh Nguyen</title>
+    <link rel="stylesheet" href="/css/styles.css">
+
+    <script defer src="https://pyscript.net/alpha/pyscript.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="include" url="/include/left-panel.html"></div>
+        <div id="highlight" name="tech"></div>
+        <div class="main-content">
+            <script src="sketch.js"></script>
+            <script src="graph.js"></script>
+            <script src="algorithm.js"></script>
+            <script src="p5.js"></script>
+            <h1>
+                Travelling Salesman Problem with Simulated Annealing
+            </h1>
+            <p>
+                <label for="temperatureDecay">Temperature Decay:</label>
+                <input id="temperatureDecay" name="temperatureDecay" value="1.0">
+            </p>
+            <table class="fixed">
+                <tr>
+                    <td align="left">
+                        <div id="debuggingIter"></div>
+                    </td>
+                    <td align="left"><input id="debuggingPause" onclick="debuggingPause()" type="button" value="Start">
+                    </td>
+                </tr>
+                <tr>
+                    <td align="left">
+                        <div id="debuggingText"></div>
+                    </td>
+                    <td align="left"><input id="debuggingReset" onclick="debuggingReset()" style="display: none" type="button"
+                                            value="Reset"></td>
+                </tr>
+            </table>
+    
+            <div id="p5canvas"></div>
+            
+            <div class="include" url="/include/footer.html"></div>
+        </div>
+    </div>
+    <script src="/js/post-script.js"></script>
+</body>
+</html>
