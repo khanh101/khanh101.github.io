@@ -1,12 +1,21 @@
+html {
+    position: relative;
+    min-height: 100%;
+}
+
 /* Set the default margin and font for the entire webpage */
 body {
     margin: 0;
     font-family: Arial, sans-serif;
+    display: flex; /* Add display: flex to the body */
+    flex-direction: column; /* Set the flex direction to column */
+    min-height: 100%; /* Set the min-height to 100% */
 }
 
 /* Create a container to hold both the left-panel and main-content */
 .container {
     display: flex;
+    flex-grow: 1; /* Add flex-grow: 1 to make the container fill the available space */
 }
 
 /* Style the left-panel with a fixed width and full height */
@@ -16,6 +25,9 @@ body {
     height: 100vh;
     padding: 20px;
     box-sizing: border-box;
+    min-height: 100%; /* Set the min-height to 100% */
+    display: flex; /* Add display: flex */
+    flex-direction: column; /* Set the flex direction to column */
 }
 
 /* Remove default padding and bullets from unordered lists in the left-panel */
