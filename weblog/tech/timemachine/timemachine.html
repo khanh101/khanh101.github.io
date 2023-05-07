@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Khanh Nguyen</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="include" url="/include/left-panel.html"></div>
+        <div id="highlight" name="tech"></div>
+        <div class="main-content">
+            <h1>Time Machine on Network Storage (Linux host)</h1>
+            <i>A tutorial to setup Time Machine on SMB with Linux host</i>
+            <br>
+            <br>
+            <br>
+            <h2>Setup SMB on Linux</h2>
+            Step 1: Install Samba
+            <textarea style="font-family: Arial,sans-serif;font-size: 12pt;height: 12pt;width: 100%;resize: none" readonly>
+    sudo pacman -S samba
+            </textarea>
+            <br>
+            <br>
+            Step 2: Config Samba <b>/etc/samba/smb.conf</b>
+            <textarea style="font-family: Arial,sans-serif;font-size: 12pt;height: 108pt;width: 100%;resize: none" readonly>
+    [global]
+            server role = standalone server
+    [data]
+            path = /home/khanh/data
+            valid users = khanh
+            force user = khanh
+            force group = khanh
+            read only = no
+            guest ok = no
+            </textarea>
+            <br>
+            <br>
+            Step 3: Add Samba user 
+            <textarea style="font-family: Arial,sans-serif;font-size: 12pt;height: 12pt;width: 100%;resize: none" readonly>
+    sudo smbpasswd -a khanh
+            </textarea>
+            <br>
+            <br>
+            Step 4: Enable and start Samba service 
+            <textarea style="font-family: Arial,sans-serif;font-size: 12pt;height: 12pt;width: 100%;resize: none" readonly>
+    sudo systemctl enable --now smb
+            </textarea>
+    
+            <br>
+            <br>
+            <br>
+            <h2>Setup Time Machine on Mac</h2>
+            Step 1: Connect to Samba using Finder.app
+            <br>
+            <br>
+            Step 2: Open Disk Utility, create an empty disk image (File - New Image - Blank Image) and save to the connected Samba folder
+            <br>
+            <br>
+            Step 3: Set Time Machine location using <b>tmutil</b>
+            <textarea style="font-family: Arial,sans-serif;font-size: 12pt;height: 12pt;width: 100%;resize: none" readonly>
+    sudo tmutil setdestination /Volumes/&lt;name of the created disk image&gt;
+            </textarea>
+            <br>
+            <br>
+            Step 4 (Optional): Add created disk image into Login Items, Time Machine disk will be auto mounted at boot
+    
+    
+            
+            <div class="include" url="/include/footer.html"></div>
+        </div>
+    </div>
+    <script src="/js/post-script.js"></script>
+</body>
+</html>
