@@ -173,7 +173,7 @@ Hence the inverse of exponential is defined as a multi-function
 Defining $\log$ as a multi-function being the inverse of exponential function
 
 \begin{align*}
-    \log &: \mathbb{C} \to \mathcal{P}(\mathbb{C}) \\
+    \log &: \mathbb{C} \setminus \{ 0 \} \to \mathcal{P}(\mathbb{C}) \\
     \log(z) &= \{x: x \in \mathbb{C} \land e^x = z\} \\
     \log(r e^{i\theta}) &= \{\log r + i (\theta + 2\pi k): k \in \mathbb{Z}\} \\
 \end{align*}
@@ -197,7 +197,7 @@ Write $z$ in polar form
 
 \textbf{$n$ is a positive integer}
 
-$z^n: \mathbb{C} \to \mathbb{C}$ is a proper function \footnote{one input, one output}
+$z^n: \mathbb{C} \setminus \{ 0 \} \to \mathbb{C}$ is a proper function \footnote{one input, one output}
 
 \begin{align*}
     z^n &= e^{n \log r} e^ {\{ i n (\theta + 2 \pi k): k \in \mathbb{Z} \}} \\
@@ -206,7 +206,7 @@ $z^n: \mathbb{C} \to \mathbb{C}$ is a proper function \footnote{one input, one o
 
 \textbf{$m-th$ root, i.e $n = 1/m$ where $m \in \mathbb{N} \setminus \{0\}$}
 
-There are $m$ $m-th$ roots of complex number $z$
+There are $m$ $m-th$ roots of complex number $z \neq 0$
 
 \begin{align*}
     z^n = \sqrt[m]{z}&= e^{\frac{\log r}{m}} e^ {\{ i (\frac{\theta}{m} + \frac{2 \pi}{m} k): k \in \mathbb{Z} \}} \\
@@ -218,23 +218,21 @@ There are $m$ $m-th$ roots of complex number $z$
 There are infinitely many output values of power function
 
 
-\textbf{Properties of Exponential function}
+\textbf{Properties of Exponential function and Power function}
 
-Exponential of sum is product of exponentials
-$$
-    e^{z_1 + z_2} = e^{z_1} e^{z_2}
-$$
+Exponential function
+\begin{itemize}
+    \item $e^{a + b} = e^{a} e^{b}$
+    \item $e^{-a} = (e^{a})^{-1}$
+\end{itemize}
 
-Exponential of additive inverse is the multiplicative inverse of exponential
-$$
-    e^{-z} = (e^{z})^{-1}
-$$
+Power function
+\begin{itemize}
+    \item $z^{a + b} = z^{a} z^{b}$
+    \item $z^{-a} = (z^{a})^{-1}$
+    \item $z^{ab} = (z^a)^b$
+\end{itemize}
 
-
-
-$$
-    e^{ab} = (e^a)^b
-$$
 
 
 \section{Subspace of $\mathbb{R}^{2 \times 2}$}
