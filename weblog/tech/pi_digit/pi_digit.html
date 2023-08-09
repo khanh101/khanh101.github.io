@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Khanh Nguyen</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="include" url="/include/left-panel.html"></div>
+        <div id="highlight" name="tech"></div>
+        <div class="main-content">
+            <h1>Pi Digit Extraction</h1>
+            <i style="color:red">this code currently does not work, likely due to javascript changes</i>
+            <h2>calculate pi on your browser</h2>
+            Github Repo: <a href="https://github.com/khanh101/pi_digit_extraction">here</a>, Pi <a href="https://www.pi2e.ch/blog/wp-content/uploads/2017/03/pi_dec_1m.txt">here</a>
+            <br>
+            <input id="pause" type="button" value="start"> <div id="status"></div>
+            <label for="placeholder"></label><textarea id="placeholder" name="textarea" style="font-family: Arial,sans-serif;font-size: 12pt;width:100%;height:100vw" readonly></textarea>
+    
+    
+            <script src="digit_extraction.js" type="module"></script>
+            <script src="hex2dec.js" type="module"></script>
+            <script src="draw.js" type="module"></script>
+            <script src="pi_digit.js" type="module"></script>
+            
+            <div class="include" url="/include/footer.html"></div>
+        </div>
+    </div>
+    <script src="/js/post-script.js"></script>
+</body>
+</html>

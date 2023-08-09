@@ -1,0 +1,63 @@
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+/* Set the default margin and font for the entire webpage */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    display: flex; /* Add display: flex to the body */
+    flex-direction: column; /* Set the flex direction to column */
+    min-height: 100%; /* Set the min-height to 100% */
+}
+
+/* Create a container to hold both the left-panel and main-content */
+.container {
+    display: flex;
+    flex-grow: 1; /* Add flex-grow: 1 to make the container fill the available space */
+}
+
+/* Style the left-panel with a fixed width and full height */
+.left-panel {
+    background-color: #2c3e50;
+    width: 250px;
+    height: 100vh;
+    padding: 20px;
+    box-sizing: border-box;
+    min-height: 100%; /* Set the min-height to 100% */
+    display: flex; /* Add display: flex */
+    flex-direction: column; /* Set the flex direction to column */
+}
+
+/* Remove default padding and bullets from unordered lists in the left-panel */
+.left-panel ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+/* Style the links in the left-panel */
+.left-panel ul li a {
+    text-decoration: none;
+    color: #bdc3c7;
+    display: block;
+    padding: 10px 0;
+}
+
+/* Change the link color on hover */
+.left-panel ul li a:hover {
+    color: #ffffff;
+}
+
+/* Add left padding to nested unordered lists in the left-panel */
+.left-panel ul ul {
+    padding-left: 20px;
+}
+
+/* Style the main content area */
+.main-content {
+    flex-grow: 1;
+    padding: 20px;
+    background-color: #ecf0f1;
+}
+
