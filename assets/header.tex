@@ -10,6 +10,17 @@
 % no automatically indentation
 \usepackage{indentfirst}
 
+% manually indent
+\usepackage{xargs} % \newcommandx
+\usepackage{calc} % calculation
+\newcommandx{\tab}[1][1=1]{\hspace{\fpeval{#1 * 10}pt}}
+% \newcommand[number of parameters]{output}
+% \newcommandx[number of parameters][parameter index = x]{output}
+% use parameter index = x to substitute the default argument
+% use #1, #2, ... to get the first, second, ... arguments
+% \tab for indentation
+% \tab{2} for for indentation twice
+
 
 %% math package
 \usepackage{amsfonts}
