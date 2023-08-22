@@ -7,8 +7,17 @@
 %% comment
 \usepackage{comment}
 
-% indent the first paragraph
-\usepackage{indentfirst}
+% no automatically indentation
+\setlength{\parindent}{0pt}
+
+% manually indent
+\usepackage{xargs} % \newcommandx
+\usepackage{calc} % calculation
+\newcommandx{\tab}[1][1=1]{\hspace{\fpeval{#1 * 10}pt}}
+% \newcommand[number of parameters]{output}
+% \newcommandx[number of parameters][parameter index = x]{output}
+% use parameter index = x to substitute the default argument
+% use #1, #2, ... to get the first, second, ... arguments
 
 
 %% math package
@@ -16,10 +25,14 @@
 \usepackage{amsmath}
 \usepackage{amssymb}
 
+
 %% operator
 \DeclareMathOperator{\tr}{tr}
 \DeclareMathOperator{\diag}{diag}
 \DeclareMathOperator{\sign}{sign}
+\DeclareMathOperator{\grad}{grad}
+\DeclareMathOperator{\curl}{curl}
+\DeclareMathOperator{\Div}{div}
 
 %% theorems
 \newtheorem{axiom}{Axiom}
