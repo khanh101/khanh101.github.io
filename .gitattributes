@@ -1,1 +1,2 @@
 weblog/text/topbook/topbook.pdf filter=lfs diff=lfs merge=lfs -text
+blog/text/topbook/topbook.pdf filter=lfs diff=lfs merge=lfs -text
