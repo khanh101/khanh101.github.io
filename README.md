@@ -1,10 +1,5 @@
 ### Hi there 👋
 
-Why `101`?
-
-`192.168.x.101` is the first IPv4 in my local network.
-
-
 [home page](https://khanh101.github.io) view count
 
 
