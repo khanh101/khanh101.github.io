@@ -98,6 +98,13 @@
 \usepackage{algorithm}
 \usepackage{algpseudocode}
 
+% longproof
+\newenvironment{longproof}[1][\proofname]{%
+  \begin{proof}[#1]$ $\par\nobreak\ignorespaces
+}{%
+  \end{proof}
+}
+
 % margin
 \usepackage{geometry}
 \geometry{
