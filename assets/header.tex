@@ -21,8 +21,10 @@
 % \tab for indentation
 % \tab{2} for for indentation twice
 
-% todo
-\newcommand\todo{\textcolor{red}{TODO}}
+% note
+\newcommandx{\note}[1]{\textcolor{red}{#1}}
+\newcommand{\todo}{\note{TODO}}
+% \note{TODO}
 
 %% math package
 \usepackage{amsfonts}
