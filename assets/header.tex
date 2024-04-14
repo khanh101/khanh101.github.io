@@ -21,6 +21,10 @@
 % \tab for indentation
 % \tab{2} for for indentation twice
 
+% note
+\newcommandx{\note}[1]{\textit{\textcolor{red}{#1}}}
+\newcommand{\todo}{\note{TODO}}
+% \note{TODO}
 
 %% math package
 \usepackage{amsfonts}
@@ -28,7 +32,7 @@
 \usepackage{amssymb}
 \usepackage{tikz-cd}
 \usepackage{mathtools}
-
+\usepackage{amsthm}
 
 %% operator
 \DeclareMathOperator{\tr}{tr}
@@ -42,12 +46,33 @@
 \DeclareMathOperator{\real}{Re}
 \DeclareMathOperator{\imag}{Im}
 \DeclareMathOperator{\supp}{supp}
-\DeclareMathOperator{\im}{Im}
+\DeclareMathOperator{\im}{im}
 \DeclareMathOperator{\aut}{Aut}
 \DeclareMathOperator{\inn}{Inn}
 \DeclareMathOperator{\Char}{char}
 \DeclareMathOperator{\Sylow}{Syl}
-
+\DeclareMathOperator{\coker}{coker}
+\DeclareMathOperator{\inc}{in}
+\DeclareMathOperator{\Sd}{Sd}
+\DeclareMathOperator{\Hom}{Hom}
+\DeclareMathOperator{\interior}{int}
+\DeclareMathOperator{\ob}{ob}
+\DeclareMathOperator{\Set}{Set}
+\DeclareMathOperator{\Top}{Top}
+\DeclareMathOperator{\Grp}{Grp}
+\DeclareMathOperator{\Ab}{Ab}
+\DeclareMathOperator{\Ch}{Ch}
+\DeclareMathOperator{\Fun}{Fun}
+\DeclareMathOperator{\Gr}{Gr}
+\DeclareMathOperator{\End}{End}
+\DeclareMathOperator{\Ad}{Ad}
+\DeclareMathOperator{\ad}{ad}
+\DeclareMathOperator{\Bil}{Bil}
+\DeclareMathOperator{\Tor}{Tor}
+\DeclareMathOperator{\Ho}{Ho}
+\DeclareMathOperator{\RMod}{R-Mod}
+\DeclareMathOperator{\Ev}{Ev}
+\DeclareMathOperator{\Nat}{Nat}
 
 %% pair delimiter
 \DeclarePairedDelimiter{\abs}{\lvert}{\rvert}
@@ -88,6 +113,7 @@
 \newcommand\R{\mathbb{R}}
 \newcommand\C{\mathbb{C}}
 \newcommand\F{\mathbb{F}}
+\newcommand\T{\mathbb{T}}
 
 % mathrsfs symbols
 \newcommand\Borel{\mathscr{B}}
@@ -96,6 +122,24 @@
 \usepackage{algorithm}
 \usepackage{algpseudocode}
 
+% longproof
+\newenvironment{longproof}[1][\proofname]{%
+  \begin{proof}[#1]$ $\par\nobreak\ignorespaces
+}{%
+  \end{proof}
+}
+
+
+% for (i) enumerate
+% \begin{enumerate}[label=(\roman*)]
+%   \item First item
+%   \item Second item
+%   \item Third item
+% \end{enumerate}
+\usepackage{enumitem}
+
+% insert url by \url{}
+\usepackage{url}
 
 % margin
 \usepackage{geometry}
