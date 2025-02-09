@@ -3,7 +3,7 @@ import os
 import shutil
 
 dst_dir = "blog/pdf"
-src_dir = "/Users/khanh/docs/latex_code"
+src_dir = "/Users/khanh/docs/latex_docs"
 
 if __name__ == "__main__":
     if os.path.exists(dst_dir):
