@@ -308,4 +308,6 @@ TSWLatexianTemp*
 # pdf
 *.pdf
 
+# user-defined
 .DS_Store
+build
